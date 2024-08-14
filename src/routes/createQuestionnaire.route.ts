@@ -8,15 +8,20 @@ export async function createQuestionnaire(app: FastifyInstance) {
     app.post('/questionnaire', async (request, reply) => {
         const created = z.object({
             title: z.string(),
+            options: z.array(z.string()),
         });
 
-        const { title } = created.parse(request.body);
+        const { title, options } = created.parse(request.body);
 
         try {
 
+            const optionsMapped = options.map(option => ({ title: option }))
+
             const data = await useCase.create({
-                title
+                title,
+                options: optionsMapped
             });
+
             return reply.status(201).send({ id: data.id });
 
         } catch (err) {
