@@ -1,4 +1,4 @@
-import { GetQuestionnaireInterfaceRepository, IGetQuestionnaire, IGetQuestionnaireData } from "../interfaces/getQuestionnaire.interface";
+import { GetQuestionnaireInterfaceRepository, IGetQuestionnaire } from "../interfaces/getQuestionnaire.interface";
 import { prisma } from "../prisma/config/PrismaClient.config";
 
 export class GetQuestionnaireUseCase implements GetQuestionnaireInterfaceRepository {
@@ -7,6 +7,14 @@ export class GetQuestionnaireUseCase implements GetQuestionnaireInterfaceReposit
             const questionnaire = await prisma.questionnaire.findUnique({
                 where: {
                     id: questionnaireId,
+                },
+                include: {
+                    options: {
+                        select: {
+                            id: true,
+                            title: true
+                        }
+                    }
                 }
             });
 
