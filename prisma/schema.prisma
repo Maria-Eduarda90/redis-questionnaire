@@ -13,6 +13,7 @@ model Questionnaire {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now())
   options   Options[]
+  vote      Vote[]
 }
 
 model Options {
@@ -21,4 +22,18 @@ model Options {
   questionnaireId String
 
   questionnaire Questionnaire @relation(fields: [questionnaireId], references: [id])
+  vote          Vote[]
+}
+
+model Vote {
+  id              Int      @id @default(autoincrement())
+  sessionId       String
+  questionnaireId String
+  optionsId       String
+  createdAt       DateTime @default(now())
+
+  questionnaireOptionId Options       @relation(fields: [optionsId], references: [id])
+  questionnaire         Questionnaire @relation(fields: [questionnaireId], references: [id])
+
+  @@unique([sessionId, questionnaireId])
 }
