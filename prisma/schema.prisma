@@ -32,8 +32,8 @@ model Vote {
   optionsId       String
   createdAt       DateTime @default(now())
 
-  questionnaireOptionId Options       @relation(fields: [optionsId], references: [id])
-  questionnaire         Questionnaire @relation(fields: [questionnaireId], references: [id])
+  options       Options       @relation(fields: [optionsId], references: [id])
+  questionnaire Questionnaire @relation(fields: [questionnaireId], references: [id])
 
   @@unique([sessionId, questionnaireId])
 }
