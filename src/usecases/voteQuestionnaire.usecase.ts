@@ -1,6 +1,7 @@
 import { VoteInterfaceRepository } from './../interfaces/VoteQuestionnaire.interface';
 import { Ivote } from "../interfaces/VoteQuestionnaire.interface";
-import { prisma } from "../prisma/config/PrismaClient.config";
+import { prisma } from '../libs/prisma/config/PrismaClient.config';
+import { redis } from '../libs/redis/redis';
 
 export class CreateVoteUseCase implements VoteInterfaceRepository {
     async create({ sessionId, questionnaireId, optionsId }: Ivote): Promise<Ivote> {
@@ -21,7 +22,9 @@ export class CreateVoteUseCase implements VoteInterfaceRepository {
                             id: userVote.id
                         }
                     });
-                } else if (userVote){
+
+                    await redis.zincrby(questionnaireId, -1, userVote.optionsId);
+                } else if (userVote) {
                     throw new Error('voce já votou nesse questionario').message;
                 }
 
@@ -49,6 +52,9 @@ export class CreateVoteUseCase implements VoteInterfaceRepository {
                     optionsId
                 }
             });
+
+            // incrementando em 1 o ranking da opção dentro do questionario
+            await redis.zincrby(questionnaireId, 1, optionsId);
 
             return created;
         } catch (err) {
