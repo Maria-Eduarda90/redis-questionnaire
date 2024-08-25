@@ -1,5 +1,5 @@
 import { GetQuestionnaireInterfaceRepository, IGetQuestionnaire } from "../interfaces/getQuestionnaire.interface";
-import { prisma } from "../prisma/config/PrismaClient.config";
+import { prisma } from "../libs/prisma/config/PrismaClient.config";
 
 export class GetQuestionnaireUseCase implements GetQuestionnaireInterfaceRepository {
     async getQuestionnaire({ questionnaireId }: IGetQuestionnaire): Promise<any> {
