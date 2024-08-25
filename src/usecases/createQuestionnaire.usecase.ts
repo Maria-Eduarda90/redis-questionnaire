@@ -1,5 +1,5 @@
 import { ICreateQuestionnaire, IQuestionnaire, QuestionnaireInterfaceRepository } from "../interfaces/CreateQuestionnaire.interface";
-import { prisma } from "../prisma/config/PrismaClient.config";
+import { prisma } from "../libs/prisma/config/PrismaClient.config";
 
 export class CreateQuestionnaireUseCase implements QuestionnaireInterfaceRepository {
     async create({ title, options }: ICreateQuestionnaire): Promise<IQuestionnaire> {
